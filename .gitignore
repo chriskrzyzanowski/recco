@@ -1,7 +1,24 @@
+# OS / Drive
+desktop.ini
+Thumbs.db
 .DS_Store
-.claude/
-v1/
-v2/
-v3/
-*.tmp
+
+# Editor
+.vscode/
+.idea/
+
+# Local Claude state
+.claude/settings.local.json
+.claude/launch.json
+
+# Legacy folders kept locally but not for the demo repo
+_archive/
+v3 (current)/
+
+# Tooling caches
 node_modules/
+.vercel/
+
+# Temp
+*.tmp
+*.bak

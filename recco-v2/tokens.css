@@ -1,0 +1,104 @@
+/* Recco design tokens
+ *
+ * Aesthetic: warm editorial, food-forward, original (not MenuWise dark).
+ * UX priority: fast, clear, restaurant-friendly. High contrast. Big tap targets.
+ * Type:  Inter Tight (UI) + JetBrains Mono (badges, match %, captions).
+ */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root {
+  /* Surface */
+  --bone:       #FAF7F2;   /* page bg — warm bone */
+  --paper:      #FFFFFF;   /* cards on bone */
+  --cream:      #F2EDE4;   /* subtle elevated */
+  --sand:       #E8DFD0;   /* dividers, chip rest */
+  --char:       #1A1815;   /* primary text — deep ink */
+  --char-2:     #57524A;   /* secondary text */
+  --char-3:     #8A8378;   /* tertiary / hints */
+
+  /* Accent — saturated tomato */
+  --tomato:     oklch(62% 0.19 25);     /* primary CTA, match score */
+  --tomato-ink: oklch(40% 0.16 25);     /* text on tomato-soft */
+  --tomato-soft:oklch(94% 0.04 25);     /* tinted card bg */
+
+  /* Status */
+  --safe:       oklch(58% 0.12 155);    /* sage green */
+  --safe-soft:  oklch(94% 0.04 155);
+  --warn:       oklch(60% 0.16 60);     /* amber */
+  --warn-soft:  oklch(95% 0.05 60);
+  --flag:       oklch(58% 0.18 25);     /* tomato deep */
+  --flag-soft:  oklch(94% 0.05 25);
+
+  /* Type */
+  --sans: 'Inter Tight', -apple-system, system-ui, sans-serif;
+  --mono: 'JetBrains Mono', ui-monospace, monospace;
+
+  /* Radii */
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 20px;
+  --r-xl: 28px;
+  --r-full: 9999px;
+
+  /* Shadows (very subtle — light theme) */
+  --shadow-1: 0 1px 2px rgba(26,24,21,0.04), 0 2px 8px rgba(26,24,21,0.04);
+  --shadow-2: 0 4px 12px rgba(26,24,21,0.06), 0 12px 32px rgba(26,24,21,0.06);
+  --shadow-3: 0 12px 40px rgba(26,24,21,0.12);
+}
+
+/* Reset within Recco app */
+.recco-app, .recco-app * {
+  box-sizing: border-box;
+}
+.recco-app {
+  font-family: var(--sans);
+  color: var(--char);
+  background: var(--bone);
+  font-feature-settings: 'ss01', 'cv11';
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+.recco-app button {
+  font-family: inherit;
+  cursor: pointer;
+  border: none;
+  background: none;
+  color: inherit;
+  padding: 0;
+}
+.recco-app input, .recco-app textarea {
+  font-family: inherit;
+  border: none;
+  outline: none;
+  background: none;
+  color: inherit;
+}
+.recco-app .mono {
+  font-family: var(--mono);
+  font-feature-settings: 'ss02';
+}
+.recco-app *::-webkit-scrollbar { display: none; }
+.recco-app * { scrollbar-width: none; }
+
+/* shared keyframes */
+@keyframes recco-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes recco-slide-up {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes recco-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+@keyframes recco-scan {
+  0% { transform: translateY(0%); }
+  50% { transform: translateY(380px); }
+  100% { transform: translateY(0%); }
+}
+@keyframes recco-spin {
+  to { transform: rotate(360deg); }
+}

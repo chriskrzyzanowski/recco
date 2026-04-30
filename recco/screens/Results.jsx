@@ -167,7 +167,7 @@ function DishRow({ dish, saved, onClick, onToggleSave, delay = 0 }) {
   );
 }
 
-// ─── Layout 2: Cards (2-up grid) ──────────────────────────────
+// ─── Layout 2: Cards (2-up grid) ─────────────────────────────
 function CardsLayout({ dishes, savedSet, onOpenDish, onToggleSave }) {
   if (dishes.length === 0) return <EmptyMsg>No dishes match this filter.</EmptyMsg>;
   return (
