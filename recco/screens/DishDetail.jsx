@@ -71,29 +71,6 @@ function DishDetailScreen({ dish, saved, meal, onBack, onToggleSave, onAskAI, on
         {/* ─── Why this pick? — transparent score breakdown ─── */}
         <WhyThisPick dish={dish} />
 
-        {/* Macros */}
-        <div style={{ padding: '0 24px 24px' }}>
-          <SectionLabel style={{ marginBottom: 12 }}>Nutrition · estimated</SectionLabel>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 10 }}>
-            {[
-              ['Cal', dish.macros.cal, ''],
-              ['Pro', dish.macros.p, 'g'],
-              ['Carb', dish.macros.c, 'g'],
-              ['Fat', dish.macros.f, 'g'],
-            ].map(([k, v, u]) => (
-              <div key={k} style={{
-                background: 'var(--paper)', border: '1px solid var(--sand)',
-                borderRadius: 'var(--r-md)', padding: 12,
-              }}>
-                <div className="mono" style={{ fontSize: 10, color: 'var(--char-3)', letterSpacing: '0.08em' }}>{k.toUpperCase()}</div>
-                <div style={{ fontSize: 18, fontWeight: 800, marginTop: 4, letterSpacing: '-0.02em' }}>
-                  {v}<span style={{ fontSize: 12, fontWeight: 600, color: 'var(--char-3)', marginLeft: 1 }}>{u}</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
         {/* Ingredients */}
         <div style={{ padding: '0 24px 24px' }}>
           <SectionLabel style={{ marginBottom: 12 }}>Ingredients · annotated</SectionLabel>

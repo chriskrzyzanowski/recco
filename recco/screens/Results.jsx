@@ -83,15 +83,6 @@ function StackLayout({ dishes, savedSet, onOpenDish, onToggleSave, onAskAI }) {
             <MatchRing score={hero.score} size={52} stroke={4} />
           </div>
 
-          {/* Macros */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 6, padding: '12px 0 0', borderTop: '1px solid var(--sand)' }}>
-            {[['Cal', hero.macros.cal], ['Pro', `${hero.macros.p}g`], ['Carb', `${hero.macros.c}g`], ['Fat', `${hero.macros.f}g`]].map(([k, v]) => (
-              <div key={k}>
-                <div className="mono" style={{ fontSize: 10, color: 'var(--char-3)', letterSpacing: '0.06em' }}>{k.toUpperCase()}</div>
-                <div style={{ fontSize: 15, fontWeight: 700, marginTop: 2 }}>{v}</div>
-              </div>
-            ))}
-          </div>
 
           {/* Flags / tags */}
           {hero.flags.length > 0 ? (
@@ -156,7 +147,7 @@ function DishRow({ dish, saved, onClick, onToggleSave, delay = 0 }) {
           {!dish.isSafe && <span style={{ color: 'var(--flag)', flexShrink: 0 }}><Icons.Alert size={14} /></span>}
         </div>
         <div style={{ fontSize: 12, color: 'var(--char-3)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', marginTop: 1 }}>
-          {dish.macros.cal} cal · {dish.section}
+          {dish.section}
         </div>
       </div>
       <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
@@ -201,7 +192,7 @@ function CardsLayout({ dishes, savedSet, onOpenDish, onToggleSave }) {
           </div>
           <div style={{ flex: 1 }}>
             <div style={{ fontSize: 13, fontWeight: 700, lineHeight: 1.2 }}>{d.name}</div>
-            <div style={{ fontSize: 11, color: 'var(--char-3)', marginTop: 2 }}>{d.macros.cal} cal · {d.macros.p}g pro</div>
+            <div style={{ fontSize: 11, color: 'var(--char-3)', marginTop: 2 }}>{d.section}</div>
             {!d.isSafe && <div style={{ fontSize: 10, color: 'var(--flag)', marginTop: 4, fontWeight: 600 }}>⚠ {d.flags[0]}</div>}
           </div>
         </div>
@@ -260,7 +251,7 @@ function CompareLayout({ dishes, savedSet, onOpenDish, onToggleSave }) {
             <DishThumb dish={d} size={60} radius={12} />
             <div>
               <div style={{ fontSize: 14, fontWeight: 700, letterSpacing: '-0.01em', lineHeight: 1.2 }}>{d.name}</div>
-              <div style={{ fontSize: 11, color: 'var(--char-3)', marginTop: 4 }}>{d.macros.cal} cal · {d.macros.p}g pro · {d.macros.c}g carb</div>
+              <div style={{ fontSize: 11, color: 'var(--char-3)', marginTop: 4 }}>{d.section}</div>
             </div>
             {!d.isSafe && <Pill tone="flag" size="sm">⚠ {d.flags[0]}</Pill>}
           </button>

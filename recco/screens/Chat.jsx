@@ -47,7 +47,7 @@ function DishChatScreen({ dish, onBack }) {
         <DishThumb dish={dish} size={36} radius={8} />
         <div style={{ flex: 1, minWidth: 0 }}>
           <div style={{ fontSize: 12, color: 'var(--char-3)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
-            {dish.macros.cal} cal · {dish.flags.length ? `contains ${dish.flags.join(', ')}` : 'safe for you'}
+            {dish.flags.length ? `contains ${dish.flags.join(', ')}` : 'safe for you'}
           </div>
         </div>
       </div>
