@@ -3,20 +3,10 @@
 
 // ─── Logo ────────────────────────────────────────────────────
 function ReccoLogo({ size = 28, color = 'var(--char)' }) {
-  // Wordmark: lowercase "recco" with a soft tomato dot over the second 'c'
-  // (the "recommendation" mark).
+  // Wordmark: lowercase "recco".
   return (
     <div style={{ display: 'inline-flex', alignItems: 'baseline', gap: 0, fontFamily: 'var(--sans)', fontWeight: 800, fontSize: size, letterSpacing: '-0.04em', color, lineHeight: 1, position: 'relative' }}>
-      <span style={{ position: 'relative' }}>
-        recco
-        <span style={{
-          position: 'absolute',
-          width: size * 0.18, height: size * 0.18, borderRadius: '50%',
-          background: 'var(--tomato)',
-          // sit above the second 'c'
-          top: -size * 0.18, left: size * 0.78,
-        }} />
-      </span>
+      <span style={{ position: 'relative' }}>recco</span>
     </div>
   );
 }
