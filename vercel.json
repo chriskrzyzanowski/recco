@@ -1,7 +1,7 @@
 {
   "cleanUrls": true,
   "rewrites": [
-    { "source": "/", "destination": "/Recco.html" }
+    { "source": "/", "destination": "/Recco" }
   ],
   "headers": [
     {
