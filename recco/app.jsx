@@ -37,8 +37,6 @@ function ReccoApp({ initialRoute = 'landing' }) {
   // Track whether the flavor screen is being used during onboarding
   // (where finishing → 'success') or from the profile editor (back to 'profile').
   const [flavorReturn, setFlavorReturn] = React.useState('success');
-  // Group ordering — companion ids selected
-  const [groupSelected, setGroupSelected] = React.useState([]);
 
   // Persist
   React.useEffect(() => {
@@ -104,7 +102,7 @@ function ReccoApp({ initialRoute = 'landing' }) {
       'signin': 'welcome',
       'history': 'home', 'saved': 'home', 'profile': 'home',
       'edit-diet': 'profile', 'edit-allergens': 'profile',
-      'paywall': 'profile', 'group': 'profile',
+      'paywall': 'profile',
       'results': 'home', 'dish': 'results', 'chat': 'dish',
       'scan': 'home', 'analysis': 'scan',
     };
@@ -255,7 +253,7 @@ function ReccoApp({ initialRoute = 'landing' }) {
       screen = <PaywallScreen
         isPro={!!state.profile.isPro}
         source={state.paywallSource || 'profile'}
-        onBack={() => go(state.paywallSource === 'group' ? 'group' : 'profile')}
+        onBack={() => go('profile')}
         onStartTrial={(plan) => {
           setProfile({ isPro: true, plan });
           setState(s => ({ ...s, paywallSource: null }));
@@ -263,33 +261,6 @@ function ReccoApp({ initialRoute = 'landing' }) {
         }}
       />;
       break;
-    case 'group':
-      screen = <GroupScreen
-        profile={state.profile}
-        selectedIds={groupSelected}
-        isPro={!!state.profile.isPro}
-        onToggle={(id) => setGroupSelected(s => s.includes(id) ? s.filter(x => x !== id) : [...s, id])}
-        onBack={() => go('profile')}
-        onUpsell={() => { setState(s => ({ ...s, paywallSource: 'group' })); go('paywall'); }}
-        onContinue={() => go('group-results')}
-      />;
-      break;
-    case 'group-results': {
-      const diners = [
-        { id: 'host', name: 'You', avatar: { initials: 'Y', color: 'var(--tomato)' }, profile: state.profile },
-        ...COMPANIONS.filter(c => groupSelected.includes(c.id)),
-      ];
-      const groupRanked = rankGroup(activeRestaurant.dishes, diners);
-      screen = <GroupResultsScreen
-        restaurant={activeRestaurant}
-        dishes={groupRanked}
-        diners={diners}
-        onBack={() => go('group')}
-        onOpenDish={openDish}
-        onAskAI={askAI}
-      />;
-      break;
-    }
     case 'scan':
       screen = <CameraScanScreen restaurant={activeRestaurant} onBack={() => go('home')} onComplete={onScanDone} />;
       break;

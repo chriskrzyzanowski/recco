@@ -14,6 +14,9 @@ Thumbs.db
 # Legacy folders kept locally but not for the demo repo
 _archive/
 v3 (current)/
+v1/
+v2/
+v3/
 
 # Tooling caches
 node_modules/

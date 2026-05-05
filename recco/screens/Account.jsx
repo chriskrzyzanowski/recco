@@ -178,7 +178,7 @@ function ProfileScreen({ profile, savedCount, scanCount, mealCount = 0, onNav, o
               </div>
               <div style={{ flex: 1 }}>
                 <div style={{ fontSize: 15, fontWeight: 800, letterSpacing: '-0.01em' }}>Try Recco Pro</div>
-                <div style={{ fontSize: 12, color: 'rgba(250,247,242,0.7)', marginTop: 2 }}>Group ordering · unlimited chat · 7-day trial</div>
+                <div style={{ fontSize: 12, color: 'rgba(250,247,242,0.7)', marginTop: 2 }}>Sharper picks · unlimited chat · 7-day trial</div>
               </div>
               <Icons.Chevron size={18} stroke={2.2} />
             </div>
@@ -213,9 +213,7 @@ function ProfileScreen({ profile, savedCount, scanCount, mealCount = 0, onNav, o
 
         <SectionLabel style={{ marginBottom: 8 }}>App</SectionLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--sand)', borderRadius: 'var(--r-md)', overflow: 'hidden', marginBottom: 24 }}>
-          <ProfileRow icon={<Icons.User size={18} />} label="Group ordering" value={profile.isPro ? 'Pro' : 'Free · 1 guest'} onClick={() => onOpen('group')} />
           <ProfileRow icon={<Icons.History size={18} />} label="Scan history" />
-          <ProfileRow icon={<Icons.Globe size={18} />} label="Language" value="English" />
           <ProfileRow icon={<Icons.Settings size={18} />} label="Notifications" value="On" />
         </div>
 

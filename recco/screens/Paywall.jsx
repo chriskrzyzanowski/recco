@@ -13,15 +13,13 @@ function PaywallScreen({ onBack, onStartTrial, source = 'profile', isPro = false
   // Source-aware headline so the upsell feels contextual (a Group-flow user
   // gets a Group-flow headline, etc.)
   const headlines = {
-    profile:  ["Recco Pro", "Sharper picks. Group dinners. No nags."],
-    group:    ["Eat together with Recco Pro", "Group ordering for up to 6 people, with one combined ranking."],
+    profile:  ["Recco Pro", "Sharper picks. No nags."],
     history:  ["Keep every meal in Recco Pro", "Unlimited scan history and exportable taste archive."],
     chat:     ["Unlimited dish chat with Recco Pro", "Ask anything — about ingredients, subs, or wine pairings."],
   };
   const [eyebrow, headline] = headlines[source] || headlines.profile;
 
   const features = [
-    { icon: <Icons.User size={18} />,    title: 'Group ordering',     sub: 'Combine up to 6 taste profiles and rank one menu for the whole table.' },
     { icon: <Icons.History size={18} />, title: 'Unlimited history',  sub: 'Free keeps the last 5 scans. Pro keeps every meal forever.' },
     { icon: <Icons.Send size={18} />,    title: 'Unlimited dish chat',sub: 'Free is capped at 5 questions/day. Pro is unmetered.' },
     { icon: <Icons.Sparkle size={18} />, title: 'Taste archive',      sub: 'Export your taste vector + meal history as JSON. Bring it to any future Recco.' },
