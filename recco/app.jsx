@@ -34,9 +34,6 @@ function ReccoApp({ initialRoute = 'landing' }) {
   const [activeDishId, setActiveDishId] = React.useState(null);
   const [activeScan, setActiveScan] = React.useState(null); // { restaurant, ranked }
   const [chatDishId, setChatDishId] = React.useState(null);
-  // Track whether the flavor screen is being used during onboarding
-  // (where finishing → 'success') or from the profile editor (back to 'profile').
-  const [flavorReturn, setFlavorReturn] = React.useState('success');
 
   // Persist
   React.useEffect(() => {
@@ -98,23 +95,23 @@ function ReccoApp({ initialRoute = 'landing' }) {
   const goBack = () => {
     // simple back map
     const map = {
-      'diet': 'welcome', 'allergens': 'diet', 'flavor': 'allergens', 'success': 'flavor',
-      'signin': 'welcome',
+      'setup': 'landing',
       'history': 'home', 'saved': 'home', 'profile': 'home',
       'edit-diet': 'profile', 'edit-allergens': 'profile',
       'paywall': 'profile',
       'results': 'home', 'dish': 'results', 'chat': 'dish',
-      'scan': 'home', 'analysis': 'scan',
+      'scan': 'home',
     };
     setRoute(map[route] || 'home');
   };
 
   // Action: start a scan flow
   const startScan = () => setRoute('scan');
-  const onScanDone = () => setRoute('analysis');
-  const onAnalysisDone = () => {
+  // Scan animation finishes -> jump straight to results (skip the
+  // analysis screen — simpler MVP flow).
+  const onScanDone = () => {
     setActiveScan({ restaurant: activeRestaurant, ranked });
-    setState(s => ({ ...s, hasScanned: true }));
+    setState(s => ({ ...s, hasScanned: true, onboarded: true }));
     setRoute('results');
   };
 
@@ -131,59 +128,18 @@ function ReccoApp({ initialRoute = 'landing' }) {
   let screen;
   switch (route) {
     case 'landing':
-      screen = <LandingScreen onGetStarted={() => go('welcome')} />;
+      screen = <LandingScreen onGetStarted={() => go('setup')} />;
       break;
-    case 'welcome':
-      screen = <WelcomeScreen
-        onContinue={() => go('diet')}
-        onSkip={() => { setState(s => ({ ...s, onboarded: true })); go('home'); }}
-        onSignIn={() => go('signin')}
-      />;
-      break;
-    case 'signin':
-      screen = <SignInScreen onBack={goBack} onContinue={() => { setState(s => ({ ...s, onboarded: true, profile: { ...s.profile, email: 'you@email.com' } })); go('home'); }} />;
-      break;
-    case 'diet':
-      screen = <DietSelectionScreen
-        value={state.profile.diet}
-        onChange={(v) => setProfile({ diet: v })}
-        onBack={goBack}
-        onContinue={() => go('allergens')}
-      />;
-      break;
-    case 'allergens':
-      screen = <AllergenSelectionScreen
-        value={state.profile.allergens}
-        onToggle={(id) => setProfile({ allergens: state.profile.allergens.includes(id) ? state.profile.allergens.filter(a => a !== id) : [...state.profile.allergens, id] })}
-        onBack={goBack}
-        onContinue={() => { setFlavorReturn('success'); go('flavor'); }}
-        onSkip={() => { setFlavorReturn('success'); go('flavor'); }}
-      />;
-      break;
-    case 'flavor':
-      screen = <FlavorSwipeScreen
-        onBack={() => go(flavorReturn === 'profile' ? 'profile' : 'allergens')}
-        onComplete={(vector) => {
-          setProfile({ tastes: vector });
-          if (flavorReturn === 'success') {
-            setState(s => ({ ...s, onboarded: true }));
-            go('success');
-          } else {
-            go('profile');
-          }
-        }}
-        onSkip={() => {
-          if (flavorReturn === 'success') {
-            setState(s => ({ ...s, onboarded: true }));
-            go('success');
-          } else {
-            go('profile');
-          }
+    case 'setup':
+      screen = <ProfileSetupScreen
+        profile={state.profile}
+        onUpdateProfile={setProfile}
+        onBack={() => go('landing')}
+        onContinue={() => {
+          setState(s => ({ ...s, onboarded: true }));
+          startScan();
         }}
       />;
-      break;
-    case 'success':
-      screen = <OnboardingSuccessScreen profile={state.profile} onContinue={startScan} />;
       break;
     case 'home':
       // "New user" = just onboarded, never scanned, no saves, no rated meals.
@@ -239,7 +195,7 @@ function ReccoApp({ initialRoute = 'landing' }) {
         scanCount={history.length + 1}
         mealCount={state.meals.length}
         onNav={go}
-        onOpen={(r) => { if (r === 'flavor') setFlavorReturn('profile'); go(r); }}
+        onOpen={(r) => go(r)}
         onSignOut={() => { localStorage.removeItem(STORAGE_KEY); setState(defaultState()); go('landing'); }}
       />;
       break;
@@ -263,9 +219,6 @@ function ReccoApp({ initialRoute = 'landing' }) {
       break;
     case 'scan':
       screen = <CameraScanScreen restaurant={activeRestaurant} onBack={() => go('home')} onComplete={onScanDone} />;
-      break;
-    case 'analysis':
-      screen = <AIAnalysisScreen profile={state.profile} onComplete={onAnalysisDone} />;
       break;
     case 'results':
       screen = <ResultsScreen

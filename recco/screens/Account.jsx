@@ -153,7 +153,6 @@ function ProfileScreen({ profile, savedCount, scanCount, mealCount = 0, onNav, o
         <div style={{ display: 'flex', flexDirection: 'column', gap: 1, background: 'var(--sand)', borderRadius: 'var(--r-md)', overflow: 'hidden', marginBottom: 24 }}>
           <ProfileRow icon={<Icons.Wand size={18} />} label="Diet" value={dietLabel} onClick={() => onOpen('edit-diet')} />
           <ProfileRow icon={<Icons.Alert size={18} />} label="Allergens" value={profile.allergens.length ? `${profile.allergens.length} flagged` : 'None'} onClick={() => onOpen('edit-allergens')} />
-          <ProfileRow icon={<Icons.Sparkle size={18} />} label="Flavors" value={tasteCount ? `${tasteCount} cues` : 'Not set'} onClick={() => onOpen('flavor')} />
         </div>
 
         {/* Pro upsell card — shown only to free users */}
