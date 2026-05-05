@@ -8,18 +8,19 @@ function LandingScreen({ onGetStarted }) {
         position: 'sticky', top: 0, zIndex: 5,
         padding: '64px 24px 14px',
         background: 'rgba(250,247,242,0.92)', backdropFilter: 'blur(16px)',
-        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', gap: 12,
         borderBottom: '1px solid var(--sand)',
       }}>
         <ReccoLogo size={22} />
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 5 }}>
+          <span className="mono" style={{ fontSize: 11, fontWeight: 700, letterSpacing: '0.08em', color: 'var(--tomato)' }}>AI</span>
+          <span style={{ fontFamily: 'var(--sans)', fontSize: 14, fontWeight: 800, letterSpacing: '-0.02em', color: 'var(--char)' }}>Menu Intelligence</span>
+        </div>
       </div>
 
       {/* Hero */}
       <div style={{ padding: '32px 28px 32px' }}>
-        <Pill tone="tomato" size="md" style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.08em' }}>
-          AI MENU INTELLIGENCE
-        </Pill>
-        <div style={{ fontSize: 38, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05, marginTop: 16 }}>
+        <div style={{ fontSize: 38, fontWeight: 800, letterSpacing: '-0.03em', lineHeight: 1.05 }}>
           Stop guessing.<br/>Start <span style={{ color: 'var(--tomato)' }}>recco</span>mmending.
         </div>
         <div style={{ fontSize: 15, color: 'var(--char-2)', marginTop: 14, lineHeight: 1.5 }}>
@@ -28,20 +29,6 @@ function LandingScreen({ onGetStarted }) {
 
         <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 10 }}>
           <PrimaryButton onClick={onGetStarted} icon={<Icons.Camera size={20} />}>Start scanning</PrimaryButton>
-          <div style={{ fontSize: 12, color: 'var(--char-3)', textAlign: 'center' }}>Free · No account needed to start</div>
-        </div>
-
-        {/* Social proof */}
-        <div style={{ marginTop: 28, padding: 14, background: 'var(--paper)', border: '1px solid var(--sand)', borderRadius: 'var(--r-md)', display: 'flex', alignItems: 'center', gap: 12 }}>
-          <div style={{ display: 'flex' }}>
-            {['#A0392E', '#7A8A6F', '#D9B864', '#8C6A4A'].map((c, i) => (
-              <div key={i} style={{ width: 26, height: 26, borderRadius: '50%', background: c, marginLeft: i === 0 ? 0 : -8, border: '2px solid var(--paper)' }} />
-            ))}
-          </div>
-          <div style={{ flex: 1 }}>
-            <div className="mono" style={{ fontSize: 13, fontWeight: 700, color: 'var(--char)' }}>★ 4.9 · 12,000 reviews</div>
-            <div style={{ fontSize: 11, color: 'var(--char-3)' }}>Featured in Eater & Bon Appétit</div>
-          </div>
         </div>
       </div>
 
