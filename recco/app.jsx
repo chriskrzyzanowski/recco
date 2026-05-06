@@ -152,7 +152,7 @@ function ReccoApp({ initialRoute = 'landing' }) {
         profile={state.profile}
         savedSet={savedSet}
         layout={state.layoutVariant}
-        onBack={startScan}
+        onBack={() => go('landing')}
         onOpenDish={openDish}
         onToggleSave={toggleSave}
         onAskAI={askAI}
