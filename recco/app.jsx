@@ -17,7 +17,8 @@ function defaultState() {
     saved: [],            // dish ids
     historyExtra: [],     // additional past scans (besides seeded)
     layoutVariant: 'stack',
-    mood: null,           // null | 'light' | 'indulgent' | 'adventurous' | 'familiar'
+    mood: null,           // session: null | 'healthy' | 'comfort' | 'adventurous' | 'familiar'
+    hunger: null,         // session: null | 'light' | 'moderate' | 'hungry' | 'very-hungry'
     meals: [],            // [{ dishId, rating: 'up'|'down'|'wrong', at: timestamp }]
     activeRestaurantId: DEFAULT_RESTAURANT_ID, // which restaurant the user is currently 'at'
   };
@@ -133,7 +134,11 @@ function ReccoApp({ initialRoute = 'landing' }) {
     case 'setup':
       screen = <ProfileSetupScreen
         profile={state.profile}
+        mood={state.mood}
+        hunger={state.hunger}
         onUpdateProfile={setProfile}
+        onSetMood={(m) => setState(s => ({ ...s, mood: m }))}
+        onSetHunger={(h) => setState(s => ({ ...s, hunger: h }))}
         onBack={() => go('landing')}
         onContinue={() => {
           setState(s => ({ ...s, onboarded: true }));

@@ -1,47 +1,73 @@
 // Recco — single-page profile setup (replaces multi-step onboarding for MVP)
 //
-// Shown right after Landing's "Start scanning". Asks the same questions a user
-// can edit later from Profile (diet + allergens), then routes straight to the
-// camera scanner via "Scan the menu".
+// Shown right after Landing's "Start scanning". In-the-moment questions
+// (hunger + mood) plus persistent allergen flags, then routes straight to
+// the camera scanner via "Scan the menu".
 
-function ProfileSetupScreen({ profile, onUpdateProfile, onContinue, onBack }) {
+const HUNGER_LEVELS = [
+  { id: 'light',       label: 'Light bite' },
+  { id: 'moderate',    label: 'Moderate' },
+  { id: 'hungry',      label: 'Hungry' },
+  { id: 'very-hungry', label: 'Very hungry' },
+];
+
+const MOOD_CHOICES = [
+  { id: 'healthy',     label: 'Healthy',     hint: 'Greens, lean protein, clean' },
+  { id: 'comfort',     label: 'Comfort',     hint: 'Hearty and satisfying' },
+  { id: 'adventurous', label: 'Adventurous', hint: 'Something new tonight' },
+  { id: 'familiar',    label: 'Familiar',    hint: 'Stick with what works' },
+];
+
+function ProfileSetupScreen({ profile, mood, hunger, onUpdateProfile, onSetMood, onSetHunger, onContinue, onBack }) {
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
-      <TopBar onBack={onBack} title="Your profile" />
+      <TopBar onBack={onBack} title="Your visit" />
       <div style={{ flex: 1, overflowY: 'auto', padding: '0 28px 20px' }}>
         <div style={{ fontSize: 26, fontWeight: 800, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
-          Tell us how you eat
+          How are you feeling?
         </div>
         <div style={{ fontSize: 14, color: 'var(--char-2)', marginTop: 6, lineHeight: 1.4, marginBottom: 28 }}>
-          We'll use this to rank menus for you. You can change anything later from Profile.
+          We'll rank dishes for the meal you want, right now.
         </div>
 
-        {/* Diet */}
-        <SectionLabel style={{ marginBottom: 12 }}>Diet</SectionLabel>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 28 }}>
-          {DIETS.map(d => {
-            const sel = profile.diet === d.id;
+        {/* Hunger scale */}
+        <SectionLabel style={{ marginBottom: 12 }}>How hungry are you?</SectionLabel>
+        <div style={{ display: 'flex', gap: 6, marginBottom: 28 }}>
+          {HUNGER_LEVELS.map((h, i) => {
+            const sel = hunger === h.id;
             return (
-              <button key={d.id} onClick={() => onUpdateProfile({ diet: d.id })} style={{
-                display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
-                padding: '14px 16px', borderRadius: 'var(--r-md)',
+              <button key={h.id} onClick={() => onSetHunger(h.id)} style={{
+                flex: 1,
+                padding: '12px 6px',
+                borderRadius: 'var(--r-md)',
+                background: sel ? 'var(--char)' : 'var(--paper)',
+                color: sel ? 'var(--bone)' : 'var(--char)',
+                border: '1.5px solid ' + (sel ? 'var(--char)' : 'var(--sand)'),
+                fontSize: 12, fontWeight: 700, lineHeight: 1.2,
+                transition: 'all 0.15s',
+              }}>{h.label}</button>
+            );
+          })}
+        </div>
+
+        {/* Mood */}
+        <SectionLabel style={{ marginBottom: 12 }}>What sounds good?</SectionLabel>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 28 }}>
+          {MOOD_CHOICES.map(m => {
+            const sel = mood === m.id;
+            return (
+              <button key={m.id} onClick={() => onSetMood(m.id)} style={{
+                padding: '14px 14px',
+                borderRadius: 'var(--r-md)',
                 background: sel ? 'var(--char)' : 'var(--paper)',
                 color: sel ? 'var(--bone)' : 'var(--char)',
                 border: '1.5px solid ' + (sel ? 'var(--char)' : 'var(--sand)'),
                 textAlign: 'left',
                 transition: 'all 0.15s',
+                display: 'flex', flexDirection: 'column', gap: 2,
               }}>
-                <div>
-                  <div style={{ fontSize: 15, fontWeight: 700 }}>{d.label}</div>
-                  <div style={{ fontSize: 12, color: sel ? 'rgba(250,247,242,0.7)' : 'var(--char-3)', marginTop: 2 }}>{d.hint}</div>
-                </div>
-                <div style={{
-                  width: 22, height: 22, borderRadius: '50%',
-                  border: '2px solid ' + (sel ? 'var(--bone)' : 'var(--sand)'),
-                  display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0,
-                }}>
-                  {sel && <div style={{ width: 10, height: 10, borderRadius: '50%', background: 'var(--bone)' }} />}
-                </div>
+                <span style={{ fontSize: 15, fontWeight: 700 }}>{m.label}</span>
+                <span style={{ fontSize: 11, color: sel ? 'rgba(250,247,242,0.7)' : 'var(--char-3)' }}>{m.hint}</span>
               </button>
             );
           })}
