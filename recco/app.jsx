@@ -13,7 +13,7 @@ function loadState() {
 function defaultState() {
   return {
     onboarded: false,
-    profile: { diet: 'balanced', dietTags: [], allergens: [], name: 'You', email: null, tastes: null },
+    profile: { diet: 'balanced', dietTag: null, allergens: [], name: 'You', email: null, tastes: null },
     saved: [],            // dish ids
     historyExtra: [],     // additional past scans (besides seeded)
     layoutVariant: 'stack',

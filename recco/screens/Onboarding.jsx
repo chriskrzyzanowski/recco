@@ -80,17 +80,13 @@ function ProfileSetupScreen({ profile, mood, hunger, onUpdateProfile, onSetMood,
           })}
         </div>
 
-        {/* Diet preferences (multi-select) */}
-        <SectionLabel style={{ marginBottom: 12 }}>Diet preferences</SectionLabel>
+        {/* Diet preference (single-select) */}
+        <SectionLabel style={{ marginBottom: 12 }}>Diet preference</SectionLabel>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 28 }}>
           {DIET_TAGS.map(d => {
-            const tags = profile.dietTags || [];
-            const sel = tags.includes(d.id);
+            const sel = profile.dietTag === d.id;
             return (
-              <button key={d.id} onClick={() => {
-                const next = sel ? tags.filter(x => x !== d.id) : [...tags, d.id];
-                onUpdateProfile({ dietTags: next });
-              }} style={{
+              <button key={d.id} onClick={() => onUpdateProfile({ dietTag: sel ? null : d.id })} style={{
                 padding: '14px 14px',
                 borderRadius: 'var(--r-md)',
                 background: sel ? 'var(--char)' : 'var(--paper)',
