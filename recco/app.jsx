@@ -26,12 +26,9 @@ function defaultState() {
 
 function ReccoApp({ initialRoute = 'landing' }) {
   const [state, setState] = React.useState(() => loadState() || defaultState());
-  const [route, setRoute] = React.useState(() => {
-    // If user already onboarded on a previous session, go straight to home
-    const s = loadState();
-    if (s?.onboarded) return 'home';
-    return initialRoute;
-  });
+  // Linear MVP flow: Landing -> Setup -> Scan -> Results.
+  // Returning users still start at landing — there's no Home anymore.
+  const [route, setRoute] = React.useState(() => initialRoute);
   const [activeDishId, setActiveDishId] = React.useState(null);
   const [activeScan, setActiveScan] = React.useState(null); // { restaurant, ranked }
   const [chatDishId, setChatDishId] = React.useState(null);
@@ -94,16 +91,15 @@ function ReccoApp({ initialRoute = 'landing' }) {
   // Navigation helpers
   const go = (r) => setRoute(r);
   const goBack = () => {
-    // simple back map
+    // Linear flow back map
     const map = {
       'setup': 'landing',
-      'history': 'home', 'saved': 'home', 'profile': 'home',
-      'edit-diet': 'profile', 'edit-allergens': 'profile',
-      'paywall': 'profile',
-      'results': 'home', 'dish': 'results', 'chat': 'dish',
-      'scan': 'home',
+      'scan': 'setup',
+      'results': 'scan',
+      'dish': 'results',
+      'chat': 'dish',
     };
-    setRoute(map[route] || 'home');
+    setRoute(map[route] || 'landing');
   };
 
   // Action: start a scan flow
@@ -146,84 +142,8 @@ function ReccoApp({ initialRoute = 'landing' }) {
         }}
       />;
       break;
-    case 'home':
-      // "New user" = just onboarded, never scanned, no saves, no rated meals.
-      // Hides the seeded history/saved demos until they earn it.
-      const isNewUser = state.saved.length === 0
-        && state.meals.length === 0
-        && (state.historyExtra?.length || 0) === 0
-        && !state.hasScanned;
-      screen = (
-        <>
-          <HomeScreen
-            profile={state.profile}
-            mood={state.mood}
-            onSetMood={setMood}
-            history={isNewUser ? [] : history}
-            saved={state.saved}
-            dishesById={dishesById}
-            isNewUser={isNewUser}
-            onNav={go}
-            onScan={startScan}
-            activeRestaurantId={activeRestaurantId}
-            onSelectRestaurant={setActiveRestaurant}
-            onOpenScan={() => { setActiveScan({ restaurant: activeRestaurant, ranked }); go('results'); }}
-            onOpenDish={openDish}
-          />
-          <TabBar active="home" onNav={go} />
-        </>
-      );
-      break;
-    case 'history':
-      screen = <HistoryScreen history={history} onBack={() => go('home')} onOpen={(scan) => {
-        // Switch active restaurant to the scanned one, then open results
-        const rid = scan && scan.restaurantId;
-        if (rid && RESTAURANTS[rid]) {
-          setActiveRestaurant(rid);
-          const r = RESTAURANTS[rid];
-          const rankedR = rankDishes(r.dishes, rankingProfile);
-          // Preserve original scan date so reopened history doesn't say "Just now"
-          setActiveScan({ restaurant: { ...r, scannedAt: scan.scannedAt }, ranked: rankedR });
-        } else {
-          setActiveScan({ restaurant: activeRestaurant, ranked });
-        }
-        go('results');
-      }} onNav={go} />;
-      break;
-    case 'saved':
-      screen = <SavedScreen saved={state.saved} dishesById={dishesById} onBack={() => go('home')} onOpen={openDish} onToggleSave={toggleSave} onNav={go} />;
-      break;
-    case 'profile':
-      screen = <ProfileScreen
-        profile={state.profile}
-        savedCount={state.saved.length}
-        scanCount={history.length + 1}
-        mealCount={state.meals.length}
-        onNav={go}
-        onOpen={(r) => go(r)}
-        onSignOut={() => { localStorage.removeItem(STORAGE_KEY); setState(defaultState()); go('landing'); }}
-      />;
-      break;
-    case 'edit-diet':
-      screen = <EditDietScreen value={state.profile.diet} onChange={(v) => setProfile({ diet: v })} onBack={goBack} />;
-      break;
-    case 'edit-allergens':
-      screen = <EditAllergensScreen value={state.profile.allergens} onToggle={(id) => setProfile({ allergens: state.profile.allergens.includes(id) ? state.profile.allergens.filter(a => a !== id) : [...state.profile.allergens, id] })} onBack={goBack} />;
-      break;
-    case 'paywall':
-      screen = <PaywallScreen
-        isPro={!!state.profile.isPro}
-        source={state.paywallSource || 'profile'}
-        onBack={() => go('profile')}
-        onStartTrial={(plan) => {
-          setProfile({ isPro: true, plan });
-          setState(s => ({ ...s, paywallSource: null }));
-          go('profile');
-        }}
-      />;
-      break;
     case 'scan':
-      screen = <CameraScanScreen restaurant={activeRestaurant} onBack={() => go('home')} onComplete={onScanDone} />;
+      screen = <CameraScanScreen restaurant={activeRestaurant} onBack={() => go('setup')} onComplete={onScanDone} />;
       break;
     case 'results':
       screen = <ResultsScreen
@@ -232,7 +152,7 @@ function ReccoApp({ initialRoute = 'landing' }) {
         profile={state.profile}
         savedSet={savedSet}
         layout={state.layoutVariant}
-        onBack={() => go('home')}
+        onBack={startScan}
         onOpenDish={openDish}
         onToggleSave={toggleSave}
         onAskAI={askAI}

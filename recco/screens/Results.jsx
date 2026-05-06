@@ -15,7 +15,7 @@ function ResultsScreen({ restaurant, dishes, profile, savedSet, layout, onBack, 
       <TopBar
         title={restaurant.name}
         onBack={onBack}
-        right={<button style={{ width: 40, height: 40, borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--char-2)' }}><Icons.Search size={20} /></button>}
+        backLabel="Scan again"
       />
 
       <div style={{ flex: 1, overflowY: 'auto', paddingBottom: 32 }}>
@@ -75,7 +75,7 @@ function StackLayout({ dishes, savedSet, onOpenDish, onToggleSave, onAskAI }) {
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 14 }}>
             <div style={{ flex: 1, minWidth: 0 }}>
               <Pill tone={hero.isSafe ? 'safe' : 'flag'} size="sm">
-                {hero.isSafe ? '✓ Top pick' : '⚠ Top pick'}
+                {hero.isSafe ? '✓ Top recco' : '⚠ Top recco'}
               </Pill>
               <div style={{ fontSize: 21, fontWeight: 800, letterSpacing: '-0.02em', marginTop: 10, lineHeight: 1.2, wordBreak: 'break-word' }}>{hero.name}</div>
               <div style={{ fontSize: 13, color: 'var(--char-2)', marginTop: 6, lineHeight: 1.4 }}>{hero.blurb}</div>
@@ -95,34 +95,23 @@ function StackLayout({ dishes, savedSet, onOpenDish, onToggleSave, onAskAI }) {
             </div>
           ) : null}
 
-          {/* Actions — Ask Recco is hidden until live AI is wired (window.RECCO_ENABLE_LIVE_AI) */}
-          <div style={{ display: 'flex', gap: 8 }}>
-            {window.RECCO_ENABLE_LIVE_AI && (
+          {/* Ask Recco — hidden until live AI is wired (window.RECCO_ENABLE_LIVE_AI) */}
+          {window.RECCO_ENABLE_LIVE_AI && (
+            <div style={{ display: 'flex', gap: 8 }}>
               <button onClick={(e) => { e.stopPropagation(); onAskAI(hero.id); }} style={{
                 flex: 1, height: 44, borderRadius: 'var(--r-full)',
                 background: 'var(--cream)', color: 'var(--char)',
                 fontSize: 14, fontWeight: 700,
                 display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
               }}><Icons.Sparkle size={16} /> Ask Recco</button>
-            )}
-            <button onClick={(e) => { e.stopPropagation(); onToggleSave(hero.id); }} style={{
-              flex: window.RECCO_ENABLE_LIVE_AI ? '0 0 44px' : 1,
-              height: 44,
-              borderRadius: window.RECCO_ENABLE_LIVE_AI ? '50%' : 'var(--r-full)',
-              background: 'var(--cream)', color: savedSet.has(hero.id) ? 'var(--tomato)' : 'var(--char-2)',
-              display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
-              fontSize: 14, fontWeight: 700,
-            }}>
-              {savedSet.has(hero.id) ? <Icons.HeartOn size={18} /> : <Icons.Heart size={18} />}
-              {!window.RECCO_ENABLE_LIVE_AI && (savedSet.has(hero.id) ? 'Saved' : 'Save for later')}
-            </button>
-          </div>
+            </div>
+          )}
         </div>
       </div>
 
       {/* Rest of list */}
       <div style={{ padding: '0 24px' }}>
-        <SectionLabel style={{ marginBottom: 10 }}>Other picks</SectionLabel>
+        <SectionLabel style={{ marginBottom: 10 }}>Other reccos</SectionLabel>
         <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
           {rest.map((d, i) => <DishRow key={d.id} dish={d} saved={savedSet.has(d.id)} onClick={() => onOpenDish(d.id)} onToggleSave={() => onToggleSave(d.id)} delay={i * 30} />)}
         </div>

@@ -211,7 +211,8 @@ function TabBar({ active, onNav }) {
 
 // ─── Top bar (back button, title, optional action) ────────────
 // paddingTop: 54 clears iOS status bar / dynamic island.
-function TopBar({ title, onBack, right, transparent }) {
+function TopBar({ title, onBack, right, transparent, backLabel }) {
+  const sideWidth = backLabel ? 88 : 44;
   return (
     <div style={{
       position: 'sticky', top: 0, zIndex: 5,
@@ -220,19 +221,27 @@ function TopBar({ title, onBack, right, transparent }) {
       background: transparent ? 'transparent' : 'rgba(250,247,242,0.92)',
       backdropFilter: transparent ? 'none' : 'blur(16px)',
     }}>
-      <div style={{ width: 44, display: 'flex' }}>
+      <div style={{ width: sideWidth, display: 'flex' }}>
         {onBack && (
           <button onClick={onBack} style={{
-            width: 40, height: 40, borderRadius: '50%',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            minWidth: 40,
+            padding: backLabel ? '4px 10px' : 0,
+            height: backLabel ? 'auto' : 40,
+            borderRadius: backLabel ? 'var(--r-md)' : '50%',
+            display: 'flex',
+            flexDirection: backLabel ? 'column' : 'row',
+            alignItems: backLabel ? 'flex-start' : 'center',
+            justifyContent: 'center',
             color: 'var(--char)',
+            lineHeight: 1.1,
           }}>
             <Icons.ChevronL size={22} stroke={2.4} />
+            {backLabel && <span style={{ fontSize: 11, fontWeight: 700, marginTop: 2 }}>{backLabel}</span>}
           </button>
         )}
       </div>
       <div style={{ fontSize: 16, fontWeight: 700, letterSpacing: '-0.01em', whiteSpace: 'nowrap' }}>{title}</div>
-      <div style={{ width: 44, display: 'flex', justifyContent: 'flex-end' }}>{right}</div>
+      <div style={{ width: sideWidth, display: 'flex', justifyContent: 'flex-end' }}>{right}</div>
     </div>
   );
 }
