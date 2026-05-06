@@ -18,6 +18,13 @@ const MOOD_CHOICES = [
   { id: 'familiar',    label: 'Familiar',    hint: 'Stick with what works' },
 ];
 
+const DIET_TAGS = [
+  { id: 'vegetarian',   label: 'Vegetarian' },
+  { id: 'vegan',        label: 'Vegan' },
+  { id: 'pescatarian',  label: 'Pescatarian' },
+  { id: 'high-protein', label: 'High protein' },
+];
+
 function ProfileSetupScreen({ profile, mood, hunger, onUpdateProfile, onSetMood, onSetHunger, onContinue, onBack }) {
   return (
     <div style={{ width: '100%', height: '100%', display: 'flex', flexDirection: 'column' }}>
@@ -68,6 +75,33 @@ function ProfileSetupScreen({ profile, mood, hunger, onUpdateProfile, onSetMood,
               }}>
                 <span style={{ fontSize: 15, fontWeight: 700 }}>{m.label}</span>
                 <span style={{ fontSize: 11, color: sel ? 'rgba(250,247,242,0.7)' : 'var(--char-3)' }}>{m.hint}</span>
+              </button>
+            );
+          })}
+        </div>
+
+        {/* Diet preferences (multi-select) */}
+        <SectionLabel style={{ marginBottom: 12 }}>Diet preferences</SectionLabel>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginBottom: 28 }}>
+          {DIET_TAGS.map(d => {
+            const tags = profile.dietTags || [];
+            const sel = tags.includes(d.id);
+            return (
+              <button key={d.id} onClick={() => {
+                const next = sel ? tags.filter(x => x !== d.id) : [...tags, d.id];
+                onUpdateProfile({ dietTags: next });
+              }} style={{
+                padding: '14px 14px',
+                borderRadius: 'var(--r-md)',
+                background: sel ? 'var(--char)' : 'var(--paper)',
+                color: sel ? 'var(--bone)' : 'var(--char)',
+                border: '1.5px solid ' + (sel ? 'var(--char)' : 'var(--sand)'),
+                textAlign: 'left',
+                fontSize: 15, fontWeight: 700,
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              }}>
+                <span>{d.label}</span>
+                {sel && <Icons.Check size={18} stroke={2.6} />}
               </button>
             );
           })}
